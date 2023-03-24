@@ -65,3 +65,43 @@ const ReducerTutorial = () => {
 
 export default ReducerTutorial;
 ```
+
+## useEffect Hook
+* useEffect hook is used to trigger an effect of a state change, like you have a count state which keeps track of a counter variable, and you want to call an API whenever the count changes, to do this, you will use useEffect with count in its dependency array
+* An empty dependency array will trigger the useEffect once when component renders for the first time and NOT everytime (confirm this!)
+* If you do not pass even the empty array and remove the argument altogether, the effect will be trigger on every component re-render (massive performance issues)
+```jsx
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+
+function EffectTutorial() {
+  const [data, setData] = useState("");
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    axios
+      .get("https://jsonplaceholder.typicode.com/comments")
+      .then((response) => {
+        setData(response.data[0].email);
+        console.log("API WAS CALLED");
+      });
+  }, []);
+
+  return (
+    <div>
+      Hello World
+      <h1>{data}</h1>
+      <h1>{count}</h1>
+      <button
+        onClick={() => {
+          setCount(count + 1);
+        }}
+      >
+        Click
+      </button>
+    </div>
+  );
+}
+
+export default EffectTutorial;
+```
