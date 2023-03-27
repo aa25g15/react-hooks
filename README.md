@@ -85,7 +85,7 @@ function EffectTutorial() {
         setData(response.data[0].email);
         console.log("API WAS CALLED");
       });
-  }, []);
+  }, [count]);
 
   return (
     <div>
@@ -104,4 +104,28 @@ function EffectTutorial() {
 }
 
 export default EffectTutorial;
+```
+
+## useRef
+* In function components, we can use the useRef hook to create a value that doesn’t trigger a re-render when it’s changed, but we can use it to keep values between re-renders
+* createRef on the other hand will create the ref again on every re-render
+```jsx
+import React, { useRef } from "react";
+
+function RefTutorial() {
+  const inputRef = useRef(null);
+
+  const onClick = () => {
+    inputRef.current.value = "";
+  };
+  return (
+    <div>
+      <h1>Pedro</h1>
+      <input type="text" placeholder="Ex..." ref={inputRef} />
+      <button onClick={onClick}>Change Name</button>
+    </div>
+  );
+}
+
+export default RefTutorial;
 ```
