@@ -155,3 +155,51 @@ function LayoutEffectTutorial() {
 
 export default LayoutEffectTutorial;
 ```
+
+## useImperativeHandle
+* Can be used to define functions on the forwarded ref to a component such that those functions can be called inside the parents by invoking the functions on the ref, very useful for things like a snackbar, you do not need to pass down the functions from the parent to child anymore
+  * Parent:
+```jsx
+import React, { useRef } from "react";
+import Button from "./Button";
+
+function ImperativeHandle() {
+  const buttonRef = useRef(null);
+  return (
+    <div>
+      <button
+        onClick={() => {
+          buttonRef.current.alterToggle();
+        }}
+      >
+        Button From Parent
+      </button>
+      <Button ref={buttonRef} />
+    </div>
+  );
+}
+
+export default ImperativeHandle;
+```
+  * Child:
+```jsx
+import React, { forwardRef, useImperativeHandle, useState } from "react";
+
+const Button = forwardRef((props, ref) => {
+  const [toggle, setToggle] = useState(false);
+
+  useImperativeHandle(ref, () => ({
+    alterToggle() {
+      setToggle(!toggle);
+    },
+  }));
+  return (
+    <>
+      <button>Button From Child</button>
+      {toggle && <span>Toggle</span>}
+    </>
+  );
+});
+
+export default Button;
+```
