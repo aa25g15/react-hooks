@@ -129,3 +129,29 @@ function RefTutorial() {
 
 export default RefTutorial;
 ```
+
+## useLayoutEffect
+* This hook is called before the useEffect hook which is called when the component has been painted, this hook is called before the paint, so flash of wrong text/UI can be avoided
+```jsx
+import { useLayoutEffect, useEffect, useRef } from "react";
+
+function LayoutEffectTutorial() {
+  const inputRef = useRef(null);
+
+  useLayoutEffect(() => {
+    console.log(inputRef.current.value);
+  }, []);
+
+  useEffect(() => {
+    inputRef.current.value = "HELLO"; // Before we set the value here to HELLO, we will see a flash of the default value PEDRO
+  }, []);
+
+  return (
+    <div className="App">
+      <input ref={inputRef} value="PEDRO" style={{ width: 400, height: 60 }} />
+    </div>
+  );
+}
+
+export default LayoutEffectTutorial;
+```
