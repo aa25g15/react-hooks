@@ -203,3 +203,66 @@ const Button = forwardRef((props, ref) => {
 
 export default Button;
 ```
+
+## useContext Hook
+* Basically is used to store and share state and methods between components which are wrapped by the Context Provider
+* Can be used for app-level state management is small applications
+* You cannot keep passing props when state gets complicated and is needed across multiple components
+* Main file:
+```jsx
+import React, { useState, createContext } from "react";
+import Login from "./Login";
+import User from "./User";
+
+export const AppContext = createContext(null);
+
+function ContextTutorial() {
+  const [username, setUsername] = useState("");
+
+  return (
+    <AppContext.Provider value={{ username, setUsername }}>
+      <Login /> <User />
+    </AppContext.Provider>
+  );
+}
+
+export default ContextTutorial;
+```
+* Login component
+```jsx
+import React, { useContext } from "react";
+import { AppContext } from "./ContextTutorial";
+
+function Login() {
+  const { setUsername } = useContext(AppContext);
+
+  return (
+    <div>
+      <input
+        onChange={(event) => {
+          setUsername(event.target.value);
+        }}
+      />
+    </div>
+  );
+}
+
+export default Login;
+```
+* User component
+```jsx
+import React, { useContext } from "react";
+import { AppContext } from "./ContextTutorial";
+
+function User() {
+  const { username } = useContext(AppContext);
+
+  return (
+    <div>
+      <h1>User: {username}</h1>
+    </div>
+  );
+}
+
+export default User;
+```
