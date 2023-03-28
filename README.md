@@ -322,3 +322,54 @@ export default function MemoTutorial() {
   );
 }
 ```
+
+## useCallback Hook
+* Functions declared inside a functional component are recreated whenever the component re-renders, so if you are passing these functons to child components, this will trigger any effects associated with these functions, to prevent this, you can wrap the function in a useCallback, which basically tells react to not redeclare the function if nothing in the dependency array changes
+* Main file:
+```jsx
+import axios from "axios";
+import { useCallback, useState } from "react";
+import Child from "./Child";
+
+export default function CallBackTutorial() {
+  const [toggle, setToggle] = useState(false);
+  const [data, setData] = useState("Yo, pls sub to the channel!");
+
+  const returnComment = useCallback(
+    (name) => {
+      return data + name;
+    },
+    [data]
+  );
+
+  return (
+    <div className="App">
+      <Child returnComment={returnComment} />
+
+      <button
+        onClick={() => {
+          setToggle(!toggle);
+        }}
+      >
+        {" "}
+        Toggle
+      </button>
+      {toggle && <h1> toggle </h1>}
+    </div>
+  );
+}
+```
+* Child component:
+```jsx
+import React, { useEffect } from "react";
+
+function Child({ returnComment }) {
+  useEffect(() => {
+    console.log("FUNCTION WAS CALLED");
+  }, [returnComment]);
+
+  return <div>{returnComment("Pedro")}</div>;
+}
+
+export default Child;
+```
